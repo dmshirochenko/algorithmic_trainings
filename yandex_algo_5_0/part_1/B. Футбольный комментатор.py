@@ -1,8 +1,8 @@
 # Reading from the file
 with open("input.txt", "r") as reader:
     score_game_one_team_first, score_game_one_team_second = map(int, reader.readline().rstrip().split(":"))
-    score_game_second_team_first,score_game_second_team_second = map(int, reader.readline().rstrip().split(":"))
-    home_away = int(reader.readline())    
+    score_game_second_team_first, score_game_second_team_second = map(int, reader.readline().rstrip().split(":"))
+    home_away = int(reader.readline())
 
 goals_first_team = (score_game_one_team_first, score_game_second_team_first)
 goals_second_team = (score_game_one_team_second, score_game_second_team_second)

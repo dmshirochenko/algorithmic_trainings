@@ -3,7 +3,7 @@ with open("input.txt", "r") as reader:
     P, V = map(int, reader.readline().split(" "))
     Q, M = map(int, reader.readline().split(" "))
 
-#sort intervals
+# sort intervals
 if (P - V) > (Q - M):
     first_interval = [Q - M, Q + M]
     second_interval = [P - V, P + V]
@@ -12,7 +12,7 @@ else:
     second_interval = [Q - M, Q + M]
 
 merged_interval = []
-#merging intervals
+# merging intervals
 if first_interval[1] >= second_interval[0]:
     merged_interval = [first_interval[0], max(abs(first_interval[1]), abs(second_interval[1]))]
 

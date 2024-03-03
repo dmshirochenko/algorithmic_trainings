@@ -2,8 +2,8 @@
 with open("input.txt", "r") as reader:
     income, founders, days = map(int, reader.readline().split(" "))
 
-#import sys
-#sys.set_int_max_str_digits(0)
+# import sys
+# sys.set_int_max_str_digits(0)
 
 DIGITS_TO_TRY = [str(i) for i in range(10)]
 
@@ -16,7 +16,7 @@ else:
     income = -1
 
 if income != -1:
-    zeros = '0' * (days - 1)
+    zeros = "0" * (days - 1)
 
 # Writing to the file
 with open("output.txt", "w") as file:

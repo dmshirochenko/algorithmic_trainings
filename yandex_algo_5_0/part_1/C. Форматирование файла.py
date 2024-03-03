@@ -9,13 +9,13 @@ ans = 0
 
 for space_per_line in num_of_spaces_per_line:
     spaces_left = space_per_line
-    #tabs
+    # tabs
     num_tabs_possible = spaces_left // 4
     if num_tabs_possible > 0:
         spaces_left = spaces_left % 4
         ans += num_tabs_possible
-    
-    #tab + backspaace
+
+    # tab + backspaace
     num_backspace_and_one_space = spaces_left // 3
     if num_backspace_and_one_space > 0:
         spaces_left = spaces_left % 3

@@ -2,8 +2,8 @@
 with open("input.txt", "r") as reader:
     income, founders, days = map(int, reader.readline().split(" "))
 
-#import sys
-#sys.set_int_max_str_digits(0)
+# import sys
+# sys.set_int_max_str_digits(0)
 
 
 DIGITS_TO_TRY = [str(i) for i in range(9, -1, -1)]

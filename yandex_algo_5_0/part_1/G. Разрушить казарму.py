@@ -1,68 +1,87 @@
+import math 
+
 # Reading from the file
 with open("input.txt", "r") as reader:
     num_of_soldiers = int(reader.readline().strip())
     barracks_health = int(reader.readline().strip())
     enemy_troops_generation_speed = int(reader.readline().strip())
 
-num_of_rounds = 0
 enemy_troops = 0
-solders_left = num_of_soldiers
-enemy_troops_left = 0
-barracks_health_left = barracks_health
-current_round = 1
-min_round = -1
-game_round_results = []
+num_of_rounds = 0
+is_game_ends = False
+game_result = -1
+alt_num_of_rounds = math.inf
+min_alt_num_of_rounds = math.inf
 
 while True:
-    print("Rounds starts  ", current_round)
-    each_round_conditions = []
-    print("New num_of_soldiers", solders_left)
-    num_of_soldiers = solders_left
-    for i in range(num_of_soldiers + 1):
-        current_num_of_solders = num_of_soldiers
-        enemy_troops = enemy_troops_left
-        barracks_health = barracks_health_left
-        innner_round = current_round
+    num_of_rounds += 1
 
-        force_to_use_on_troops = i
-        force_to_use_on_barracks = current_num_of_solders - i
-        if enemy_troops > 0:
-            if enemy_troops > force_to_use_on_troops:
-                enemy_troops -= force_to_use_on_troops
-            else:
-                enemy_troops = 0
-                
+    if num_of_soldiers > enemy_troops:
+        force_to_use_on_barracks = min(barracks_health, num_of_soldiers - enemy_troops)
+        force_to_use_on_troops = num_of_soldiers - force_to_use_on_barracks
+    else:
         if barracks_health > 0:
-            if barracks_health > force_to_use_on_barracks:
-                barracks_health -= force_to_use_on_barracks
-            else:
-                barracks_health = 0
+            force_to_use_on_barracks = 1
+        else:
+            force_to_use_on_barracks = 0
+        force_to_use_on_troops = num_of_soldiers - force_to_use_on_barracks
 
-        current_num_of_solders -= enemy_troops
-
-        if barracks_health > 0:
-            enemy_troops += enemy_troops_generation_speed
-
-        each_round_conditions.append((current_num_of_solders, barracks_health, enemy_troops, innner_round + 1))
-
-
-    for round in each_round_conditions:
-        is_game_ends = False
-        solders_left, barracks_health_left, enemy_troops_left, current_round = round
-        print('Before final check =', solders_left, barracks_health_left, enemy_troops_left)
+    if num_of_soldiers > barracks_health:
+        alt_num_of_soldiers = num_of_soldiers
+        alt_num_of_enemy_troops = enemy_troops
+        alt_num_of_rounds = num_of_rounds
         
-        if solders_left <= 0:
-            game_round_results.append(('lose', current_num_of_solders, barracks_health, current_round))
-            is_game_ends = True
+        alt_force_to_use_on_troops = num_of_soldiers - barracks_health
+        alt_num_of_enemy_troops -= alt_force_to_use_on_troops
+        alt_num_of_soldiers -=  alt_num_of_enemy_troops
+        while True:
+            alt_num_of_rounds += 1
+            alt_num_of_enemy_troops -= alt_num_of_soldiers
+            if alt_num_of_enemy_troops <= 0:
+                break
+            alt_num_of_soldiers -= alt_num_of_enemy_troops
+            if alt_num_of_soldiers <= 0:
+                alt_num_of_rounds = math.inf
+                break
+        
+        min_alt_num_of_rounds = min(min_alt_num_of_rounds, alt_num_of_rounds)
+        
 
-        if barracks_health <= 0 and enemy_troops <= 0:
-            game_round_results.append(('win', current_num_of_solders, barracks_health, current_round))
-            is_game_ends = True
+    if enemy_troops > 0:
+        if enemy_troops > force_to_use_on_troops:
+            enemy_troops -= force_to_use_on_troops
+        else:
+            enemy_troops = 0
+            
+    if barracks_health > 0:
+        if barracks_health > force_to_use_on_barracks:
+            barracks_health -= force_to_use_on_barracks
+        else:
+            barracks_health = 0
 
+    num_of_soldiers -= enemy_troops
+
+    if barracks_health > 0:
+        enemy_troops += enemy_troops_generation_speed
+
+
+    if num_of_soldiers <= 0:
+        is_game_ends = True
+
+    if barracks_health <= 0 and enemy_troops <= 0:
+        game_result = 1
+        is_game_ends = True
     
-print(game_round_results)
+    if is_game_ends:
+        break
 
-print(num_of_rounds)
-# Writing to the file
+
+if  game_result == -1 and min_alt_num_of_rounds == math.inf:
+    num_of_rounds = -1
+elif game_result == -1 and min_alt_num_of_rounds != math.inf:
+    num_of_rounds = min_alt_num_of_rounds
+else:
+    num_of_rounds = min(num_of_rounds, min_alt_num_of_rounds)
+
 with open("output.txt", "w") as file:
     file.write(str(num_of_rounds))

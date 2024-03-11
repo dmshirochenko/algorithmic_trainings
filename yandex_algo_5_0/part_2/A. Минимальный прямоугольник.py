@@ -6,7 +6,7 @@ with open("input.txt", "r") as reader:
     min_x, min_y = math.inf, math.inf
     max_x, max_y = -math.inf, -math.inf
     for i in range(N):
-        x, y  = map(int, reader.readline().strip().split(" "))
+        x, y = map(int, reader.readline().strip().split(" "))
         min_x = min(min_x, x)
         min_y = min(min_y, y)
         max_x = max(max_x, x)

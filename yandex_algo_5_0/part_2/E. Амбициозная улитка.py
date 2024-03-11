@@ -41,11 +41,11 @@ for berry in berries_lst_possitive_diff:
     sum -= down
     index_order.append(str(index))
 
-#add max drop
+# add max drop
 sum += max_drop_berry[1]
 index_order.append(str(max_drop_berry[3]))
 
-#add negative berries
+# add negative berries
 for berry in berries_lst_negative_diff:
     if berry == max_drop_berry:
         continue

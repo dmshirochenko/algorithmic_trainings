@@ -1,4 +1,4 @@
-import math 
+import math
 
 with open("input.txt", "r") as reader:
     n = int(reader.readline().strip())
@@ -41,13 +41,13 @@ for el in test_cases:
     else:
         if curr_len > 0:
             sub_lst.append(curr_len)
-    
+
     ans.append(sub_lst)
 
 # Writing to the file
 with open("output.txt", "w") as file:
     for k in ans:
         file.write(str(len(k)))
-        file.write('\n')
+        file.write("\n")
         line_to_add = " ".join(str(curr_len) for curr_len in k) + "\n"
         file.write(line_to_add)

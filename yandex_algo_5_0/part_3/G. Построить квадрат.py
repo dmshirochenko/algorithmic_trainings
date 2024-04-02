@@ -9,10 +9,11 @@ with open("input.txt", "r") as reader:
         x, y = map(int, reader.readline().strip().split(" "))
         points_lst.append((x, y))
 
+
 def find_square_vertices(diagonal_point1, diagonal_point2):
     x1, y1 = diagonal_point1
     x3, y3 = diagonal_point2
-    
+
     center_x = (x1 + x3) / 2
     center_y = (y1 + y3) / 2
 
@@ -24,13 +25,14 @@ def find_square_vertices(diagonal_point1, diagonal_point2):
 
     vertex_D_x = center_x + half_delta_y
     vertex_D_y = center_y - half_delta_x
-    
+
     return [(vertex_B_x, vertex_B_y), (vertex_D_x, vertex_D_y)]
 
 
 def has_no_decimal_part(point):
     x, y = point
-    return (x % 1 == 0 and y % 1 == 0)
+    return x % 1 == 0 and y % 1 == 0
+
 
 points_set = set(points_lst)
 min_points_to_add = math.inf
@@ -54,7 +56,7 @@ for point_A, point_C in unique_pairs:
     if not is_points_decimal and curr_points_to_add < min_points_to_add:
         min_points_to_add = curr_points_to_add
         possible_points = curr_poinst_lst[:]
-        
+
 with open("output.txt", "w") as file:
     file.write(str(min_points_to_add))
     file.write("\n")

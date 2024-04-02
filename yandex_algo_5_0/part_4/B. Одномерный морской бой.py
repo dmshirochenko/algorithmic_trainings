@@ -1,8 +1,10 @@
 with open("input.txt", "r") as reader:
     N = int(reader.readline().strip())
 
+
 def find_total_num_of_squares(k):
-    return ((k * ((k**2) + (6*k) + 5))//6) - 1
+    return ((k * ((k**2) + (6 * k) + 5)) // 6) - 1
+
 
 def binary_search(left, right, n):
     while left < right:
@@ -12,8 +14,9 @@ def binary_search(left, right, n):
             left = mid_index
         else:
             right = mid_index - 1
-             
+
     return left
+
 
 ans = binary_search(1, N, N)
 

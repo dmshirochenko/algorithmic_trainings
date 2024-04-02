@@ -1,12 +1,14 @@
 with open("input.txt", "r") as reader:
     N = int(reader.readline().strip())
 
+
 def find_diagonal_linear(n):
     k = 0
     while (k * (k + 1)) // 2 < n:
         k += 1
 
     return k
+
 
 def find_diagonal_binary(n):
     left, right = 0, n
@@ -18,6 +20,7 @@ def find_diagonal_binary(n):
             right = mid
 
     return left
+
 
 def find_nth_rational(n, k):
     element_position = n - (k * (k - 1)) // 2 - 1
@@ -31,7 +34,8 @@ def find_nth_rational(n, k):
 
     return numerator, denominator
 
-#diagonal_linear = find_diagonal_linear(N)
+
+# diagonal_linear = find_diagonal_linear(N)
 diagonal_binary = find_diagonal_binary(N)
 numerator, denominator = find_nth_rational(N, diagonal_binary)
 ans = f"{numerator}/{denominator}"

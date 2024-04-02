@@ -1,85 +1,74 @@
+import math
+
 with open("input.txt", "r") as reader:
-    cols, rows, num_of_broken_piles = map(int, reader.readline().strip().split(" "))
-    broken_piles = {
-        "rows": {},
-        "cols": {}
-    }
-    for _ in range(num_of_broken_piles):
+    w, h, num_of_broken_piles = map(int, reader.readline().strip().split(" "))
+    broken_piles = []
+    for i in range(num_of_broken_piles):
         x, y = map(int, reader.readline().strip().split(" "))
-        x_to_add = x - 1
-        y_to_add = y - 1
-        if x_to_add not in broken_piles["rows"]:
-            broken_piles["rows"][x_to_add] = set()
-            broken_piles["rows"][x_to_add].add((x_to_add, y_to_add))
-        else:
-            broken_piles["rows"][x_to_add].add((x_to_add, y_to_add))
-        
-        if y_to_add not in broken_piles["cols"]:
-            broken_piles["cols"][y_to_add] = set()
-            broken_piles["cols"][y_to_add].add((x_to_add, y_to_add))
-        else:
-            broken_piles["cols"][y_to_add].add((x_to_add, y_to_add))
+        broken_piles.append((x, y))
+
 
 def print_matrix(matrix):
     for row in matrix:
         print(row)
 
-def calculate_prefix_suffix_sums(broken_piles, n, m):
-    prefix_sum_rows = [0] * n
-    suffix_sum_rows = [0] * n
-    prefix_sum_cols = [0] * m
-    suffix_sum_cols = [0] * m
 
+def check_if_lines_are_covered(broken_piles, m, n, prefmin, prefmax, sufmin, sufmax):
+    r = 0
+    pmx = -(10**9)
+    pmn = 10**9
     for i in range(n):
-        prefix_sum_rows[i] = prefix_sum_rows[i - 1] + (1 if i in broken_piles["rows"] else 0)
-    for j in range(m):
-        prefix_sum_cols[j] = prefix_sum_cols[j - 1] + (1 if j in broken_piles["cols"] else 0)
-
-    for i in range(n - 2, -1, -1):
-        suffix_sum_rows[i] = suffix_sum_rows[i + 1] + (1 if i in broken_piles["rows"] else 0)
-    for j in range(m - 2, -1, -1):
-        suffix_sum_cols[j] = suffix_sum_cols[j + 1] + (1 if j in broken_piles["cols"] else 0)
-
-    return prefix_sum_rows, suffix_sum_rows, prefix_sum_cols, suffix_sum_cols
-
-def check_width_possible(width, broken_piles, rows, cols):
-    all_broken_tiles = set()
-
-    for row_tiles in broken_piles['rows'].values():
-        all_broken_tiles.update(row_tiles)
-    
-    for row_start in range(rows - width + 1):
-        for col_start in range(cols - width + 1):
-            covered_tiles = set()
-            for r in range(row_start, row_start + width):
-                covered_tiles.update(broken_piles['rows'].get(r, set()))
-                
-            for c in range(col_start, col_start + width):
-                covered_tiles.update(broken_piles['cols'].get(c, set()))
-            if all_broken_tiles.issubset(covered_tiles):
-                return True
+        while r < n and broken_piles[r][0] < broken_piles[i][0] + m:
+            r += 1
+        mx = pmx
+        mn = pmn
+        if r != n:
+            mx = max(mx, sufmax[r])
+            mn = min(mn, sufmin[r])
+        if mx - mn < m:
+            return True
+        pmx = prefmax[i]
+        pmn = prefmin[i]
 
     return False
 
 
-def binary_search_for_min_width(n, m, prefix_sum_rows, suffix_sum_rows, prefix_sum_cols, suffix_sum_cols):
-    left, right = 1, max(n, m)
-    result = right
-    while left <= right:
+def pref_sufix_preparation(broken_piles, n):
+    prefmin = [broken_piles[0][1]] * n
+    prefmax = [broken_piles[0][1]] * n
+    sufmin = [broken_piles[-1][1]] * n
+    sufmax = [broken_piles[-1][1]] * n
+
+    for i in range(1, n):
+        prefmin[i] = min(prefmin[i - 1], broken_piles[i][1])
+        prefmax[i] = max(prefmax[i - 1], broken_piles[i][1])
+
+    for i in range(n - 2, -1, -1):
+        sufmin[i] = min(sufmin[i + 1], broken_piles[i][1])
+        sufmax[i] = max(sufmax[i + 1], broken_piles[i][1])
+
+    return prefmin, prefmax, sufmin, sufmax
+
+
+def binary_search(broken_piles, w, h, num_of_broken_piles, prefmin, prefmax, sufmin, sufmax):
+    left = 0
+    right = min(w, h)
+    while left < right:
         mid = (left + right) // 2
-        if check_width_possible(mid, broken_piles, n, m):
-            result = mid
-            right = mid - 1
+        all_covered = check_if_lines_are_covered(
+            broken_piles, mid, num_of_broken_piles, prefmin, prefmax, sufmin, sufmax
+        )
+        if all_covered:
+            right = mid
         else:
             left = mid + 1
-    return result
+
+    return left
 
 
-# Пример использования
 if __name__ == "__main__":
-    #print(broken_piles)
-    prefix_sum_rows, suffix_sum_rows, prefix_sum_cols, suffix_sum_cols = calculate_prefix_suffix_sums(broken_piles, rows, cols)
-    binary_search_result = binary_search_for_min_width(rows, cols, prefix_sum_rows, suffix_sum_rows, prefix_sum_cols, suffix_sum_cols)
-    #print('binary_search_result', binary_search_result)
+    broken_piles.sort()
+    prefmin, prefmax, sufmin, sufmax = pref_sufix_preparation(broken_piles, num_of_broken_piles)
+    ans = binary_search(broken_piles, w, h, num_of_broken_piles, prefmin, prefmax, sufmin, sufmax)
     with open("output.txt", "w") as file:
-        file.write(str(binary_search_result))
+        file.write(str(ans))

@@ -17,12 +17,12 @@ for right in range(len(digit_lst)):
 
     while len(hash_map_k) > k:
         # remove arr[left] from curr
-        del hash_map_k[digit_lst[left]] 
+        del hash_map_k[digit_lst[left]]
         left += 1
 
     if hash_map_k[digit_lst[right]] > 1:
         ans = "YES"
         break
-    
+
 with open("output.txt", "w") as file:
     file.write(str(ans))

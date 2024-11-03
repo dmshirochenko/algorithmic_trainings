@@ -1,9 +1,10 @@
-with open('input.txt', 'r') as reader:
+with open("input.txt", "r") as reader:
     N, K = map(int, reader.readline().split())
     nums = list(map(int, reader.readline().split()))
 
+
 def find_length_of_equals_to_k(nums, k):
-    left = curr =  0
+    left = curr = 0
     times_seen = 0
     for right in range(len(nums)):
         curr += nums[right]
@@ -14,6 +15,7 @@ def find_length_of_equals_to_k(nums, k):
             times_seen += 1
 
     return times_seen
+
 
 ans = find_length_of_equals_to_k(nums, K)
 

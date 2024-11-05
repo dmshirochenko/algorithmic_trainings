@@ -2,6 +2,7 @@ with open("input.txt", "r") as reader:
     n = int(reader.readline())
     nums = list(map(int, reader.readline().split()))
 
+
 def triple_product(nums):
     prefix_sums = [0]
     for i in range(1, len(nums) + 1):
@@ -13,6 +14,7 @@ def triple_product(nums):
             ans += nums[i - 1] * nums[j - 1] * (prefix_sums[-1] - prefix_sums[j])
 
     return ans % 1000000007
+
 
 ans = triple_product(nums)
 

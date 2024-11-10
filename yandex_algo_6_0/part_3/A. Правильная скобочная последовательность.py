@@ -1,11 +1,7 @@
 with open("input.txt", "r") as reader:
     brackets_to_check = reader.readline().strip()
 
-brakets_map = {
-    "(": ")",
-    "{": "}",
-    "[": "]"
-}
+brakets_map = {"(": ")", "{": "}", "[": "]"}
 
 
 def check_if_brackets_are_correct(brackets_to_check):

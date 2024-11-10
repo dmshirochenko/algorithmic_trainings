@@ -11,20 +11,7 @@ def min_in_k_interval(nums, k):
     left = 0
     queue = deque()
 
-    # create a queue for the first k elements
-    for i in range(left, left + k):
-        while queue and queue[-1] > nums[i]:
-            queue.pop()
-        queue.append(nums[i])
-
-    ans.append(queue[0])
-
-    if nums[left] == queue[0]:
-        queue.popleft()
-
-    left = 1
-
-    for right in range(k, len(nums)):
+    for right in range(len(nums)):
 
         while queue and queue[-1] > nums[right]:
             queue.pop()
